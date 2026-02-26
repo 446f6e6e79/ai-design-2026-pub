@@ -108,11 +108,11 @@ client = OpenAI(
 )
 
 response = client.chat.completions.create(
-    model="openai/gpt-4.1-mini",       # Or "anthropic/claude-3.5-sonnet"
-    messages=[...],                     # Or "meta-llama/llama-3.1-70b-instruct"
+    model="openai/gpt-4.1-mini",       # Or "anthropic/claude-sonnet-4"
+    messages=[...],                     # Or "meta-llama/llama-4-scout"
 )</code></pre>
 
-        <p>The OpenAI Python SDK works with OpenRouter—just change the <code>base_url</code> and use an OpenRouter API key. Get yours at <a href="https://openrouter.ai/keys">openrouter.ai/keys</a>.</p>
+        <p>The OpenAI Python SDK works with OpenRouter—just change the <code>base_url</code> and use an OpenRouter API key. This lets you easily try models from different providers. Get yours at <a href="https://openrouter.ai/keys">openrouter.ai/keys</a>.</p>
 
         <div class="content-card">
             <h4>When to use which</h4>
@@ -152,9 +152,31 @@ print(response.choices[0].message.content)</code></pre>
         <div class="content-card">
             <h4>Key parameters</h4>
             <ul>
-                <li><strong>model</strong> — which LLM to use. We use <code>gpt-4.1-mini</code>: fast, cheap, capable enough for learning. See <a href="https://platform.openai.com/docs/models">available models</a>.</li>
-                <li><strong>messages</strong> — a list of messages with roles: <code>system</code> (instructions), <code>user</code> (human input), <code>assistant</code> (model output). This is the conversation history.</li>
-                <li><strong>temperature</strong> — controls randomness. 0 = more deterministic, 1+ = more creative/random. Default is 1.</li>
+                <li><strong>model</strong> — which LLM to use. We use <code>gpt-4.1-mini</code>: a small, fast, and inexpensive model well-suited for learning. As of early 2026, OpenAI's model families include:
+                    <ul>
+                        <li><strong>GPT-5 series</strong> (current flagship) — <code>gpt-5.2</code> (best quality), <code>gpt-5-mini</code> ($0.25/M input tokens), <code>gpt-5-nano</code> (cheapest at ~$0.05/M input tokens)</li>
+                        <li><strong>GPT-4.1 series</strong> (previous generation, still available) — <code>gpt-4.1-mini</code> ($0.40/M input tokens) is what we use here</li>
+                        <li><strong>o-series</strong> (reasoning models) — <code>o3-mini</code> for math/code tasks that benefit from chain-of-thought</li>
+                    </ul>
+                    Models evolve fast — see <a href="https://platform.openai.com/docs/models">available models</a> and <a href="https://openai.com/api/pricing/">pricing</a> for the latest.
+                </li>
+                <li><strong>messages</strong> — the conversation history, as a list of message objects. Each has a <code>role</code> and <code>content</code>:
+                    <ul>
+                        <li><code>system</code> — sets the model's behavior and persona (e.g., "You are a helpful tutor"). Processed first, shapes all subsequent responses.</li>
+                        <li><code>user</code> — the human's input</li>
+                        <li><code>assistant</code> — the model's previous responses (include these to give the model memory of the conversation)</li>
+                    </ul>
+                    The API is <strong>stateless</strong>: the model has no memory between calls. To have a multi-turn conversation, you must send the full history each time.
+                </li>
+                <li><strong>temperature</strong> — controls randomness in token selection (range 0–2):
+                    <ul>
+                        <li><strong>0</strong> — nearly deterministic; picks the most likely token every time. Good for factual Q&A and structured output.</li>
+                        <li><strong>0.7</strong> (our default) — balanced creativity and coherence. Good starting point for most tasks.</li>
+                        <li><strong>1.0</strong> (OpenAI's default) — more varied outputs.</li>
+                        <li><strong>1.5+</strong> — high randomness; useful for brainstorming but may produce incoherent text.</li>
+                    </ul>
+                    Related: <code>top_p</code> (nucleus sampling) is an alternative way to control diversity. OpenAI recommends using one or the other, not both.
+                </li>
             </ul>
         </div>
 
