@@ -20,7 +20,7 @@ def _load_module(path: Path, module_name: str):
 
 def test_trim_to_window_keeps_recent_turns():
     root = Path(__file__).resolve().parents[1]
-    mod_path = root / "docs" / "labs" / "02_standalone_agents" / "3_agent_with_memory.py"
+    mod_path = root / "02_standalone_agents" / "3_agent_with_memory.py"
     m = _load_module(mod_path, "lesson2_memory")
 
     conversation = [
@@ -44,7 +44,7 @@ def test_trim_to_window_keeps_recent_turns():
 
 def test_build_messages_places_system_window_and_user():
     root = Path(__file__).resolve().parents[1]
-    mod_path = root / "docs" / "labs" / "02_standalone_agents" / "3_agent_with_memory.py"
+    mod_path = root / "02_standalone_agents" / "3_agent_with_memory.py"
     m = _load_module(mod_path, "lesson2_memory_build")
 
     memory = "- User prefers concise answers"
@@ -64,7 +64,7 @@ def test_build_messages_places_system_window_and_user():
 
 def test_long_term_memory_round_trip(tmp_path):
     root = Path(__file__).resolve().parents[1]
-    mod_path = root / "docs" / "labs" / "02_standalone_agents" / "4_agent_with_long_term_memory.py"
+    mod_path = root / "02_standalone_agents" / "4_agent_with_long_term_memory.py"
     m = _load_module(mod_path, "lesson2_long_term")
 
     # Redirect persistence to temp file for test isolation.
